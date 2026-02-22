@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora Solar Perú — ¿Cuántos paneles solares necesitas?</title>
+  <meta name="description" content="Calcula cuántos paneles solares necesitas para tu hogar, empresa o industria en Perú. Incluye datos reales de radiación solar por ciudad, inventario de equipos y retorno de inversión." />
+  <meta name="keywords" content="paneles solares peru, calculadora solar, energia solar trujillo, cuantos paneles necesito, sistema fotovoltaico peru" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Chart.js para gráficos avanzados -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js" defer></script>
+</head>
+<body>
+
+  <!-- ====================================================
+       HERO HEADER
+       ==================================================== -->
+  <header class="hero">
+    <div class="hero-badge">
+      ☀️ Calculadora Solar Profesional · Perú 2025
+    </div>
+    <h1 class="hero-title">
+      ¿Cuántos paneles solares<br>necesitas en Perú?
+    </h1>
+    <p class="hero-subtitle">
+      La calculadora más completa del país. Diseñada para hogares, empresas e industrias. 
+      Con datos reales de radiación solar de <strong>24 ciudades peruanas</strong>.
+    </p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="value">24</span>
+        <span class="label">Ciudades con datos HSP</span>
+      </div>
+      <div class="hero-stat">
+        <span class="value">60+</span>
+        <span class="label">Tipos de equipos</span>
+      </div>
+      <div class="hero-stat">
+        <span class="value">5</span>
+        <span class="label">Perfiles de usuario</span>
+      </div>
+      <div class="hero-stat">
+        <span class="value">25</span>
+        <span class="label">Años de proyección</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ====================================================
+       STEPPER NAVIGATION
+       ==================================================== -->
+  <div class="stepper-container">
+    <nav class="stepper-nav" aria-label="Pasos del cálculo">
+      <div class="stepper-item active" id="stepNav1">
+        <div class="step-circle">1</div>
+        <span class="step-label">Perfil</span>
+      </div>
+      <div class="stepper-nav-spacer" id="spacer1"></div>
+      <div class="stepper-item" id="stepNav2">
+        <div class="step-circle">2</div>
+        <span class="step-label">Consumo</span>
+      </div>
+      <div class="stepper-nav-spacer" id="spacer2"></div>
+      <div class="stepper-item" id="stepNav3">
+        <div class="step-circle">3</div>
+        <span class="step-label">Sistema</span>
+      </div>
+      <div class="stepper-nav-spacer" id="spacer3"></div>
+      <div class="stepper-item" id="stepNav4">
+        <div class="step-circle">4</div>
+        <span class="step-label">Resultados</span>
+      </div>
+    </nav>
+
+    <!-- ==================================================
+         PASO 1: PERFIL Y UBICACIÓN
+         ================================================== -->
+    <div class="step-panel active" id="step_1">
+      <div class="step-header">
+        <div class="step-number">Paso 1 de 4</div>
+        <h2 class="step-title">¿Quién va a usar el sistema solar?</h2>
+        <p class="step-desc">Selecciona tu perfil y tu ciudad para adaptar el cálculo a tus condiciones reales.</p>
+      </div>
+
+      <!-- Perfiles -->
+      <div class="mb-24">
+        <div class="ciudad-label">Selecciona tu perfil</div>
+        <div class="profile-grid" id="perfilesGrid"></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Ciudad -->
+      <div class="ciudad-section">
+        <div class="ciudad-label">¿En qué ciudad estás?</div>
+        <div class="region-tabs" id="regionTabs"></div>
+        <div class="ciudades-grid" id="ciudadesGrid"></div>
+        <!-- HSP Info -->
+        <div class="hsp-info" id="hspInfo">
+          <div class="hsp-icon">☀️</div>
+          <div class="hsp-text">
+            <h4 id="hspCiudad">Trujillo</h4>
+            <p>
+              <strong id="hspValor" class="text-primary">5.4 HSP</strong> —
+              <span id="hspNivel">😎 Muy buena radiación</span>
+            </p>
+            <p id="hspDesc">Zona con alta insolación. Excelente retorno de inversión.</p>
+            <p style="margin-top:4px;font-size:11px;color:var(--text-muted)" id="hspAltitud"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <div></div>
+        <button class="btn btn-primary btn-next" id="btnNext1">
+          Siguiente: Mi consumo <span>→</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================================================
+         PASO 2: CONSUMO ENERGÉTICO
+         ================================================== -->
+    <div class="step-panel" id="step_2">
+      <div class="step-header">
+        <div class="step-number">Paso 2 de 4</div>
+        <h2 class="step-title">¿Cuánta energía consumes?</h2>
+        <p class="step-desc">Elige el método que mejor se adapte a ti: desde tu recibo hasta un análisis detallado de equipos.</p>
+      </div>
+
+      <!-- Tabs de modo -->
+      <div class="consumo-tabs" role="tablist">
+        <button class="consumo-tab-btn active" data-mode="recibo" role="tab" aria-selected="true" id="tabRecibo">
+          🧾 Tengo mi recibo
+        </button>
+        <button class="consumo-tab-btn" data-mode="equipos" role="tab" aria-selected="false" id="tabEquipos">
+          📋 Lista de equipos
+        </button>
+        <button class="consumo-tab-btn" data-mode="ia" role="tab" aria-selected="false" id="tabIA">
+          🤖 Asistente IA
+        </button>
+      </div>
+
+      <!-- PANEL RECIBO -->
+      <div class="consumo-panel active" id="panel_recibo">
+        <div class="card" style="max-width:520px">
+          <div class="input-group">
+            <label class="input-label" for="recibokwh">Consumo mensual de tu recibo (kWh/mes)</label>
+            <div class="input-with-unit">
+              <input
+                class="input-field"
+                type="number"
+                id="recibokwh"
+                placeholder="Ej: 280"
+                min="10"
+                max="500000"
+                step="10"
+              />
+              <span class="input-unit">kWh</span>
+            </div>
+            <p class="input-helper">💡 Lo encuentras en tu recibo de Hidrandina, Edelnor, LuzdelSur, Seal u otra distribuidora.</p>
+          </div>
+
+          <div class="input-group">
+            <label class="input-label" for="tarifaSelect">Tarifa eléctrica</label>
+            <select class="input-field" id="tarifaSelect" onchange="state.tarifa_kwh=parseFloat(this.value)">
+              <option value="0.62">BT2 - Residencial (S/ 0.62/kWh) — Hogar</option>
+              <option value="0.68">BT3 - Comercial (S/ 0.68/kWh) — Negocio</option>
+              <option value="0.55">BT4 - Industrial (S/ 0.55/kWh) — Industria</option>
+              <option value="0.48">MT3 - Media Tensión (S/ 0.48/kWh) — Gran empresa</option>
+            </select>
+          </div>
+
+          <!-- Referencia rápida -->
+          <div style="background:var(--bg-card-2);border-radius:var(--radius-sm);padding:14px;margin-top:8px;">
+            <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">
+              📊 Referencias típicas en Perú
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div style="font-size:12px;color:var(--text-secondary)">🏠 Casa pequeña: <strong style="color:var(--primary)">80-150 kWh</strong></div>
+              <div style="font-size:12px;color:var(--text-secondary)">🏠 Casa mediana: <strong style="color:var(--primary)">200-350 kWh</strong></div>
+              <div style="font-size:12px;color:var(--text-secondary)">🏪 Tienda: <strong style="color:var(--primary)">300-600 kWh</strong></div>
+              <div style="font-size:12px;color:var(--text-secondary)">🏢 Oficina: <strong style="color:var(--primary)">500-1500 kWh</strong></div>
+              <div style="font-size:12px;color:var(--text-secondary)">🏭 Industria: <strong style="color:var(--primary)">3,000-50,000 kWh</strong></div>
+              <div style="font-size:12px;color:var(--text-secondary)">🏨 Hotel med.: <strong style="color:var(--primary)">3,000-8,000 kWh</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL EQUIPOS -->
+      <div class="consumo-panel" id="panel_equipos">
+        <div style="display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start;" class="equipos-layout">
+          <div>
+            <div class="ciudad-label" style="margin-bottom:12px">Filtra por categoría</div>
+            <div class="equipo-categories" id="equipoCats"></div>
+            <div class="equipos-lista" id="equiposLista"></div>
+          </div>
+          <!-- Resumen lateral -->
+          <div class="equipos-resumen">
+            <div class="equipos-resumen-title">⚡ Equipos seleccionados</div>
+            <div class="equipos-seleccionados-list" id="equiposSelLista">
+              <div style="color:var(--text-muted);font-size:13px">Sin equipos seleccionados aún</div>
+            </div>
+            <div class="equipos-total">
+              <span class="equipos-total-label">Total estimado</span>
+              <span class="equipos-total-valor" id="equiposTotalKwh">0 kWh/mes</span>
+            </div>
+            <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:11px;color:var(--text-muted)">
+              * Basado en uso estándar. Puedes ajustar horas/día por equipo.
+            </div>
+          </div>
+        </div>
+
+        <style>
+          @media (max-width: 768px) {
+            .equipos-layout { grid-template-columns: 1fr !important; }
+          }
+        </style>
+      </div>
+
+      <!-- PANEL IA -->
+      <div class="consumo-panel" id="panel_ia">
+        <div style="max-width:600px">
+          <div class="ciudad-label" style="margin-bottom:12px">Describe tu negocio o hogar en lenguaje natural</div>
+          <div class="ia-container">
+            <textarea
+              class="ia-textarea"
+              id="iaTexto"
+              placeholder="Ejemplo: 'Somos una oficina de 15 personas con 12 computadoras, 2 aires acondicionados de 18,000 BTU, impresoras y cocina...' o 'Casa de 4 personas con lavadora, refrigeradora grande y ducha eléctrica...'"
+            ></textarea>
+          </div>
+
+          <div class="ia-chips">
+            <span class="ia-chip" onclick="fillIA('Oficina de 10 personas con computadoras y A/C')">🏢 Oficina 10 pers.</span>
+            <span class="ia-chip" onclick="fillIA('Casa familiar de 4 personas con todos los electrodomésticos')">🏠 Casa 4 pers.</span>
+            <span class="ia-chip" onclick="fillIA('Restaurante con cocina industrial y refrigeración comercial')">🍽️ Restaurante</span>
+            <span class="ia-chip" onclick="fillIA('Hotel pequeño de 20 habitaciones con A/C y restaurante')">🏨 Hotel peq.</span>
+            <span class="ia-chip" onclick="fillIA('Taller mecánico con motores, compresores y soldadoras')">🔧 Taller ind.</span>
+            <span class="ia-chip" onclick="fillIA('Clínica mediana con equipos médicos, A/C y operación 24h')">🏥 Clínica</span>
+            <span class="ia-chip" onclick="fillIA('Supermercado con refrigeración, iluminación y cajas')">🛒 Supermercado</span>
+            <span class="ia-chip" onclick="fillIA('Fábrica con motores industriales de 10HP y producción continua')">🏭 Fábrica</span>
+          </div>
+
+          <div style="margin-top:16px">
+            <button class="btn btn-primary" onclick="analizarTextoIA()">
+              🤖 Analizar y estimar consumo
+            </button>
+          </div>
+
+          <div class="ia-result" id="iaResult">
+            <div class="ia-result-title">✅ Consumo estimado</div>
+            <div class="ia-result-consumo" id="iaResultConsumo">—</div>
+            <div class="ia-result-desc" id="iaResultDesc">—</div>
+            <p style="font-size:11px;color:var(--text-muted);margin-top:8px">
+              * Estimación heurística. Para mayor precisión usa la pestaña "Lista de equipos".
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary btn-prev">← Anterior</button>
+        <button class="btn btn-primary btn-next">Siguiente: Tipo de sistema →</button>
+      </div>
+    </div>
+
+    <!-- ==================================================
+         PASO 3: CONFIGURACIÓN DEL SISTEMA
+         ================================================== -->
+    <div class="step-panel" id="step_3">
+      <div class="step-header">
+        <div class="step-number">Paso 3 de 4</div>
+        <h2 class="step-title">Configura tu sistema solar</h2>
+        <p class="step-desc">Elige el tipo de panel y si quieres incluir baterías. Te recomendamos los valores por defecto.</p>
+      </div>
+
+      <!-- Paneles -->
+      <div class="mb-24">
+        <div class="ciudad-label" style="margin-bottom:14px">Tipo de panel solar</div>
+        <div class="config-grid" id="panelesGrid"></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Baterías -->
+      <div class="mb-24">
+        <div class="ciudad-label" style="margin-bottom:14px">Sistema de almacenamiento (baterías)</div>
+        <div class="bateria-options" id="bateriasContainer"></div>
+      </div>
+
+      <div class="section-divider"></div>
+
+      <!-- Config avanzada -->
+      <div class="mb-24">
+        <div class="advanced-toggle" id="advancedToggle">
+          <span class="icon">▶</span>
+          <span>⚙️ Configuración avanzada (opcional)</span>
+        </div>
+        <div class="advanced-panel" id="advancedPanel">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:600px">
+            <div class="input-group">
+              <label class="input-label" for="sombraRange">
+                Porcentaje de sombra en el techo
+                <strong id="sombraVal" class="text-primary">10%</strong>
+              </label>
+              <div class="range-slider-wrapper">
+                <input class="range-slider" type="range" id="sombraRange" min="0" max="50" value="10" step="5" style="--val:20%">
+              </div>
+              <p class="input-helper">0% = Sin sombra · 50% = Mucha sombra</p>
+            </div>
+            <div class="input-group">
+              <label class="input-label" for="eficRange">
+                Eficiencia del sistema
+                <strong id="eficVal" class="text-primary">85%</strong>
+              </label>
+              <div class="range-slider-wrapper">
+                <input class="range-slider" type="range" id="eficRange" min="70" max="95" value="85" step="5" style="--val:75%">
+              </div>
+              <p class="input-helper">70% = Sistema básico · 95% = Premium</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary btn-prev">← Anterior</button>
+        <button class="btn btn-primary btn-large btn-next" id="calcularBtn">
+          ☀️ Calcular mi sistema solar
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================================================
+         PASO 4: RESULTADOS
+         ================================================== -->
+    <div class="step-panel" id="step_4">
+      <div class="step-header">
+        <div class="step-number">Paso 4 de 4 — Resultados</div>
+        <h2 class="step-title">Tu sistema solar personalizado</h2>
+        <p class="step-desc">Aquí tienes el análisis completo basado en tus datos y la radiación real de tu ciudad.</p>
+      </div>
+
+      <div class="results-container" id="resultsContainer">
+
+        <!-- KPIs Principales -->
+        <div class="kpi-grid">
+          <div class="kpi-card yellow">
+            <div class="kpi-icon">🔆</div>
+            <div class="kpi-label">Paneles solares</div>
+            <div class="kpi-value"><span id="kpiPaneles">—</span></div>
+            <div class="kpi-sub">unidades requeridas</div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="kpi-icon">⚡</div>
+            <div class="kpi-label">Potencia del sistema</div>
+            <div class="kpi-value"><span id="kpiPotencia">—</span></div>
+            <div class="kpi-sub">kiloWatts pico (kWp)</div>
+          </div>
+          <div class="kpi-card green">
+            <div class="kpi-icon">💰</div>
+            <div class="kpi-label">Ahorro mensual</div>
+            <div class="kpi-value">
+              <span id="kpiAhorroMesPre" style="font-size:1.2rem">S/ </span><span id="kpiAhorroMes">—</span>
+            </div>
+            <div class="kpi-sub">en tu recibo eléctrico</div>
+          </div>
+          <div class="kpi-card purple">
+            <div class="kpi-icon">♻️</div>
+            <div class="kpi-label">CO₂ evitado</div>
+            <div class="kpi-value"><span id="kpiCO2">—</span><span id="kpiCO2Post" style="font-size:1rem"></span></div>
+            <div class="kpi-sub">emisiones evitadas al año</div>
+          </div>
+          <div class="kpi-card yellow" style="--primary-val: #8b5cf6">
+            <div class="kpi-icon">📅</div>
+            <div class="kpi-label">Retorno de inversión</div>
+            <div class="kpi-value" style="color:#a78bfa" id="kpiPayback">—</div>
+            <div class="kpi-sub">tiempo de recuperación</div>
+          </div>
+          <div class="kpi-card blue">
+            <div class="kpi-icon">📐</div>
+            <div class="kpi-label">Área requerida</div>
+            <div class="kpi-value" id="kpiArea">—</div>
+            <div class="kpi-sub">metros cuadrados en techo</div>
+          </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="charts-grid">
+          <!-- Donut consumo vs generación -->
+          <div class="chart-card">
+            <div class="chart-title">🍩 Consumo vs. Generación</div>
+            <div class="donut-wrap">
+              <svg class="donut-svg" width="180" height="180" viewBox="0 0 180 180">
+                <!-- Track -->
+                <circle cx="90" cy="90" r="72" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="18" />
+                <!-- Generated -->
+                <circle
+                  id="donutCircleGenera"
+                  cx="90" cy="90" r="72"
+                  fill="none"
+                  stroke="url(#donutGrad)"
+                  stroke-width="18"
+                  stroke-linecap="round"
+                  stroke-dasharray="0 452"
+                  style="transition: stroke-dasharray 1.2s cubic-bezier(.34,1.56,.64,1)"
+                />
+                <defs>
+                  <linearGradient id="donutGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#f59e0b"/>
+                    <stop offset="100%" stop-color="#10b981"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="donut-center">
+                <div class="donut-pct" id="donutPct">—%</div>
+                <div class="donut-sub">cubierto</div>
+              </div>
+            </div>
+            <div class="donut-legend">
+              <div class="legend-item">
+                <div class="legend-dot" style="background:#f59e0b"></div>
+                <span id="legendConsumo">—</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:#10b981"></div>
+                <span id="legendGenera">—</span>
+              </div>
+              <div class="legend-item" style="font-size:11px;color:var(--text-muted)">
+                <div class="legend-dot" style="background:#3b82f6"></div>
+                <span id="legendExcedente">—</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barras producción mensual -->
+          <div class="chart-card">
+            <div class="chart-title">📊 Producción estimada por mes</div>
+            <div class="bar-chart" id="barChart" style="position:relative;padding-bottom:30px"></div>
+            <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap">
+              <div class="legend-item">
+                <div class="legend-dot" style="background:#10b981"></div>
+                <span style="font-size:12px;color:var(--text-secondary)">≥ consumo (excedente)</span>
+              </div>
+              <div class="legend-item">
+                <div class="legend-dot" style="background:#f59e0b"></div>
+                <span style="font-size:12px;color:var(--text-secondary)" id="barConsLineInfo">< consumo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Desglose de costos -->
+        <div class="chart-card mb-24">
+          <div class="chart-title">💵 Desglose de inversión</div>
+          <table class="costos-table">
+            <thead>
+              <tr>
+                <th>Componente</th>
+                <th>USD</th>
+                <th>Soles (S/)</th>
+              </tr>
+            </thead>
+            <tbody id="costosTbody">
+            </tbody>
+          </table>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:8px">
+            * Precios referenciales 2025. Incluye IGV. Tipo de cambio: S/ 3.75 por dólar. Solicita una cotización formal a un instalador certificado.
+          </div>
+        </div>
+
+        <!-- Retorno de inversión -->
+        <div class="chart-card mb-24">
+          <div class="chart-title">📈 Retorno de inversión (25 años)</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));gap:16px;margin-bottom:20px">
+            <div>
+              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Retorno de inversión</div>
+              <div style="font-size:1.8rem;font-weight:800;font-family:'Space Grotesk',sans-serif;color:var(--primary)" id="paybackYears">—</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Ahorro anual</div>
+              <div style="font-size:1.4rem;font-weight:700;color:#60a5fa" id="ahorroAnio">—</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Ahorro total 25 años*</div>
+              <div style="font-size:1.4rem;font-weight:700;color:var(--accent)" id="ahorroTotal25">—</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Ganancia neta 25 años</div>
+              <div style="font-size:1.4rem;font-weight:700;color:#a78bfa" id="gananciaNeta25">—</div>
+            </div>
+            <div>
+              <div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">ROI total</div>
+              <div style="font-size:1.4rem;font-weight:700;color:var(--primary)" id="roi25">—</div>
+            </div>
+          </div>
+
+          <!-- Timeline visual -->
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">Progreso del periodo de retorno (sobre 25 años)</div>
+          <div class="timeline-bar">
+            <div class="timeline-fill" id="timelineFill"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-top:4px">
+            <span>Año 0</span><span>Año 5</span><span>Año 10</span><span>Año 15</span><span>Año 20</span><span>Año 25</span>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted);margin-top:12px">
+            * Con inflación eléctrica del 5% anual. Descontando mantenimiento (1%/año). Tipo de cambio referencial S/ 3.75.
+          </div>
+        </div>
+
+        <!-- Impacto ambiental -->
+        <div class="chart-card mb-24">
+          <div class="chart-title">🌍 Impacto ambiental y sostenibilidad</div>
+          <div class="eco-grid">
+            <div class="eco-card">
+              <div class="eco-icon">💨</div>
+              <div class="eco-value" id="ecoCO2Mes">—</div>
+              <div class="eco-label">CO₂ evitado por mes</div>
+            </div>
+            <div class="eco-card">
+              <div class="eco-icon">🏭</div>
+              <div class="eco-value" id="ecoCO2Anio">—</div>
+              <div class="eco-label">CO₂ evitado por año</div>
+            </div>
+            <div class="eco-card">
+              <div class="eco-icon">🌎</div>
+              <div class="eco-value" id="ecoCO225">—</div>
+              <div class="eco-label">CO₂ evitado en 25 años</div>
+            </div>
+            <div class="eco-card">
+              <div class="eco-icon">🌳</div>
+              <div class="eco-value" id="ecoArboles">—</div>
+              <div class="eco-label">Árboles equivalentes</div>
+            </div>
+          </div>
+          <div style="font-size:11px;color:var(--text-muted)">
+            * Factor de emisión eléctrico Perú: 0.5568 kgCO₂/kWh (MINEM 2023). 1 árbol ≈ 22 kgCO₂/año.
+          </div>
+        </div>
+
+        <!-- Especificaciones técnicas -->
+        <div class="chart-card mb-24">
+          <div class="chart-title">🔧 Especificaciones técnicas del sistema</div>
+          <div class="specs-grid">
+            <div class="spec-item">
+              <span class="spec-key">Panel seleccionado</span>
+              <span class="spec-val" id="specPanel">—</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-key">Inversor recomendado</span>
+              <span class="spec-val" id="specInversor">—</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-key">Horas pico solar (HSP)</span>
+              <span class="spec-val" id="specHSP">—</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-key">Área requerida</span>
+              <span class="spec-val" id="specArea">—</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-key">Almacenamiento</span>
+              <span class="spec-val" id="specBateria">—</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-key">Tipo de sistema</span>
+              <span class="spec-val" id="specModo">—</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-key">Eficiencia del sistema</span>
+              <span class="spec-val" id="specEfic">—</span>
+            </div>
+            <div class="spec-item">
+              <span class="spec-key">Vida útil garantizada</span>
+              <span class="spec-val" id="specVida">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Aviso legal -->
+        <div style="background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);border-radius:var(--radius-sm);padding:16px 20px;margin-bottom:28px">
+          <div style="font-size:13px;font-weight:700;color:#93c5fd;margin-bottom:6px">📋 Nota importante</div>
+          <div style="font-size:12px;color:var(--text-secondary);line-height:1.6">
+            Este cálculo es estimativo y referencial. Para una cotización exacta, contacta a un instalador solar certificado por el <strong>SENACE/OSINERGMIN</strong> o empresas como <em>MySolar, SolarPros, Enersur</em> u otras en tu región. Los precios pueden variar según disponibilidad, marca de equipos y condiciones locales.
+          </div>
+        </div>
+
+        <!-- Acciones -->
+        <div class="actions-bar">
+          <button class="btn btn-secondary" onclick="imprimirResultados()">
+            🖨️ Imprimir / PDF
+          </button>
+          <button class="btn btn-outline" onclick="copiarResumen()">
+            📋 Copiar resumen
+          </button>
+          <button class="btn btn-primary" id="recalcularBtn">
+            🔄 Nueva calculación
+          </button>
+        </div>
+
+      </div><!-- /results-container -->
+
+      <!-- Loading en step 4 antes de resultados -->
+      <div id="step4Placeholder" style="text-align:center;padding:60px 20px;color:var(--text-muted)">
+        <div style="font-size:3rem;margin-bottom:16px">☀️</div>
+        <p>Presiona <strong>"Calcular"</strong> en el paso anterior para ver los resultados.</p>
+      </div>
+
+    </div><!-- /step_4 -->
+
+  </div><!-- /stepper-container -->
+
+  <!-- ====================================================
+       FOOTER
+       ==================================================== -->
+  <footer class="footer">
+    <p>
+      ☀️ <strong>Calculadora Solar Perú</strong> — Herramienta educativa gratuita.<br/>
+      Datos de radiación solar basados en <a href="https://globalsolaratlas.info" target="_blank">Global Solar Atlas</a> y SENAMHI Perú.
+    </p>
+    <p style="margin-top:8px;font-size:12px;color:var(--text-muted)">
+      Factores de emisión CO₂: MINEM 2023. Precios eléctricos: OSINERGMIN 2025. Tipo de cambio referencial: S/ 3.75.
+    </p>
+  </footer>
+
+  <!-- NOTIFICATION -->
+  <div class="notif" id="notif" role="alert" aria-live="polite"></div>
+
+  <!-- LOADER -->
+  <div class="loader-overlay" id="loaderOverlay" role="status" aria-label="Calculando...">
+    <div class="solar-loader">
+      <div class="sun-core"></div>
+      <div class="sun-ring"></div>
+    </div>
+    <div class="loader-text">Calculando tu sistema solar...</div>
+    <div style="font-size:12px;color:var(--text-muted);margin-top:8px">Analizando radiación en tu ciudad 🌞</div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="js/data.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/app.js"></script>
+
+  <script>
+    // Helper para chips de IA
+    function fillIA(text) {
+      document.getElementById('iaTexto').value = text;
+      document.getElementById('iaTexto').focus();
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "panel_400w",
+    "nombre": "Panel Monocristalino 400W",
+    "potencia": 400,
+    "eficiencia": 0.20,
+    "precio_usd": 180,
+    "dimensiones": "1.72m × 1.04m",
+    "descripcion": "Ideal para hogares pequeños y medianos",
+    "badge": "Económico",
+    "degradacion_anual": 0.005
+  },
+  {
+    "id": "panel_450w",
+    "nombre": "Panel Monocristalino 450W",
+    "potencia": 450,
+    "eficiencia": 0.21,
+    "precio_usd": 200,
+    "dimensiones": "1.87m × 1.04m",
+    "descripcion": "Excelente balance precio-rendimiento",
+    "badge": "Recomendado",
+    "degradacion_anual": 0.005
+  },
+  {
+    "id": "panel_550w",
+    "nombre": "Panel Bifacial 550W",
+    "potencia": 550,
+    "eficiencia": 0.22,
+    "precio_usd": 260,
+    "dimensiones": "2.26m × 1.13m",
+    "descripcion": "Para empresas y mayor generación por panel",
+    "badge": "Empresas",
+    "degradacion_anual": 0.004
+  },
+  {
+    "id": "panel_600w",
+    "nombre": "Panel TOPCon 600W",
+    "potencia": 600,
+    "eficiencia": 0.235,
+    "precio_usd": 300,
+    "dimensiones": "2.38m × 1.13m",
+    "descripcion": "Alta tecnología para uso industrial",
+    "badge": "Industrial",
+    "degradacion_anual": 0.003
+  }
+]

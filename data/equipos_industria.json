@@ -1,0 +1,114 @@
+[
+  {
+    "id": "motor_5hp",
+    "nombre": "Motor industrial 5 HP",
+    "potencia": 3700,
+    "categoria": "Motores",
+    "icono": "⚙️"
+  },
+  {
+    "id": "motor_10hp",
+    "nombre": "Motor industrial 10 HP",
+    "potencia": 7500,
+    "categoria": "Motores",
+    "icono": "⚙️"
+  },
+  {
+    "id": "motor_20hp",
+    "nombre": "Motor industrial 20 HP",
+    "potencia": 15000,
+    "categoria": "Motores",
+    "icono": "⚙️"
+  },
+  {
+    "id": "motor_50hp",
+    "nombre": "Motor industrial 50 HP",
+    "potencia": 37000,
+    "categoria": "Motores",
+    "icono": "⚙️"
+  },
+  {
+    "id": "compresor_industrial",
+    "nombre": "Compresor industrial 10 HP",
+    "potencia": 7500,
+    "categoria": "Maquinaria",
+    "icono": "🔧"
+  },
+  {
+    "id": "horno_industrial",
+    "nombre": "Horno industrial eléctrico",
+    "potencia": 10000,
+    "categoria": "Maquinaria",
+    "icono": "🔥"
+  },
+  {
+    "id": "soldadora_industrial",
+    "nombre": "Soldadora MIG/TIG industrial",
+    "potencia": 8000,
+    "categoria": "Maquinaria",
+    "icono": "🔩"
+  },
+  {
+    "id": "torno_industrial",
+    "nombre": "Torno industrial CNC",
+    "potencia": 5500,
+    "categoria": "Maquinaria",
+    "icono": "🏭"
+  },
+  {
+    "id": "grua_puente",
+    "nombre": "Grúa puente eléctrica 5T",
+    "potencia": 12000,
+    "categoria": "Izamiento",
+    "icono": "🏗️"
+  },
+  {
+    "id": "bomba_industrial",
+    "nombre": "Bomba industrial 7.5 HP",
+    "potencia": 5600,
+    "categoria": "Bombeo",
+    "icono": "💧"
+  },
+  {
+    "id": "bomba_agricola",
+    "nombre": "Bomba de riego agrícola 5 HP",
+    "potencia": 3700,
+    "categoria": "Agrícola",
+    "icono": "🌱"
+  },
+  {
+    "id": "ventilador_industrial",
+    "nombre": "Ventilador industrial",
+    "potencia": 2000,
+    "categoria": "Ventilación",
+    "icono": "🌀"
+  },
+  {
+    "id": "aire_industrial",
+    "nombre": "Sistema de A/C industrial 5T",
+    "potencia": 20000,
+    "categoria": "Climatización",
+    "icono": "❄️"
+  },
+  {
+    "id": "iluminacion_nave",
+    "nombre": "Luminaria industrial LED 100W",
+    "potencia": 100,
+    "categoria": "Iluminación",
+    "icono": "💡"
+  },
+  {
+    "id": "ups_industrial",
+    "nombre": "UPS industrial 10 kVA",
+    "potencia": 8000,
+    "categoria": "Eléctrico",
+    "icono": "🔋"
+  },
+  {
+    "id": "refrigeracion_camaras",
+    "nombre": "Cámara frigorífica industrial",
+    "potencia": 15000,
+    "categoria": "Refrigeración",
+    "icono": "🧊"
+  }
+]

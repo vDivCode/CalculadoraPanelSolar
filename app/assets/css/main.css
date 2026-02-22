@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Layer base: variables globales y resets ── */
+@layer base {
+  :root {
+    --primary:        theme('colors.solar.500');
+    --primary-light:  theme('colors.solar.300');
+    --primary-dark:   theme('colors.solar.600');
+    --primary-glow:   rgba(245, 158, 11, 0.20);
+    --bg-darkest:     theme('colors.dark.900');
+    --bg-dark:        theme('colors.dark.800');
+    --bg-card:        theme('colors.dark.700');
+    --bg-card-2:      theme('colors.dark.600');
+    --radius:         1rem;
+    --radius-sm:      0.625rem;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-dark-900 text-slate-100 antialiased;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+
+  /* Scrollbar custom */
+  ::-webkit-scrollbar       { @apply w-1.5; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-dark-400 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-solar-500; }
+}
+
+/* ── Layer components: utilidades de diseño reutilizables ── */
+@layer components {
+
+  /* CARD base */
+  .card {
+    @apply bg-dark-700 border border-white/[0.06] rounded-2xl p-7 transition-all duration-200;
+  }
+  .card:hover {
+    @apply border-solar-500/20;
+  }
+
+  /* CARD seleccionable */
+  .card-selectable {
+    @apply card cursor-pointer;
+  }
+  .card-selectable:hover {
+    @apply border-solar-500/40 -translate-y-0.5;
+  }
+  .card-selectable.selected {
+    @apply border-solar-500 bg-solar-500/10 shadow-solar;
+  }
+
+  /* BADGE */
+  .badge {
+    @apply inline-flex items-center gap-1.5 text-xs font-bold tracking-wide px-3 py-1 rounded-full;
+  }
+  .badge-solar {
+    @apply badge bg-solar-500/15 border border-solar-500/40 text-solar-300;
+  }
+  .badge-green {
+    @apply badge bg-emerald-500/15 border border-emerald-500/40 text-emerald-300;
+  }
+
+  /* BOTONES */
+  .btn {
+    @apply inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-[15px] transition-all duration-200 cursor-pointer border-0 outline-none;
+  }
+  .btn-primary {
+    @apply btn bg-gradient-to-r from-solar-500 to-solar-600 text-black shadow-solar-btn;
+  }
+  .btn-primary:hover {
+    @apply -translate-y-0.5 shadow-solar-lg;
+  }
+  .btn-primary:active {
+    @apply translate-y-0;
+  }
+  .btn-secondary {
+    @apply btn bg-dark-600 border border-white/[0.07] text-slate-400;
+  }
+  .btn-secondary:hover {
+    @apply border-solar-500/30 text-slate-200;
+  }
+  .btn-outline {
+    @apply btn bg-transparent border-2 border-solar-500 text-solar-500;
+  }
+  .btn-outline:hover {
+    @apply bg-solar-500/10;
+  }
+
+  /* INPUTS */
+  .input-field {
+    @apply w-full bg-dark-600 border-2 border-white/[0.07] rounded-xl px-4 py-3.5
+           text-slate-100 text-[15px] placeholder-slate-600
+           focus:outline-none focus:border-solar-500 focus:bg-dark-500
+           focus:ring-2 focus:ring-solar-500/20 transition-all duration-200;
+  }
+  .input-label {
+    @apply block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2;
+  }
+
+  /* KPI CARD */
+  .kpi-card {
+    @apply card relative overflow-hidden;
+  }
+  .kpi-card::before {
+    content: '';
+    @apply absolute inset-x-0 top-0 h-[3px] rounded-t-2xl;
+  }
+  .kpi-solar::before  { @apply bg-gradient-to-r from-solar-500 to-solar-300; }
+  .kpi-blue::before   { @apply bg-gradient-to-r from-blue-500 to-blue-300; }
+  .kpi-green::before  { @apply bg-gradient-to-r from-emerald-500 to-emerald-300; }
+  .kpi-purple::before { @apply bg-gradient-to-r from-violet-500 to-violet-300; }
+
+  /* ECO CARD */
+  .eco-card {
+    @apply text-center p-6 rounded-2xl border
+           bg-emerald-500/5 border-emerald-500/20;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    @apply my-7 border-0 h-px bg-gradient-to-r from-transparent via-white/[0.07] to-transparent;
+  }
+}

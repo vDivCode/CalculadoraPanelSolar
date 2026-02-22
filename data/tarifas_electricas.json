@@ -1,0 +1,26 @@
+{
+  "bt2": {
+    "id": "bt2",
+    "nombre": "BT2 - Residencial",
+    "precio_kwh": 0.62,
+    "descripcion": "Uso doméstico / hogar"
+  },
+  "bt3": {
+    "id": "bt3",
+    "nombre": "BT3 - Comercial",
+    "precio_kwh": 0.68,
+    "descripcion": "Pequeños negocios y comercio"
+  },
+  "bt4": {
+    "id": "bt4",
+    "nombre": "BT4 - Industrial BT",
+    "precio_kwh": 0.55,
+    "descripcion": "Industria en baja tensión"
+  },
+  "mt3": {
+    "id": "mt3",
+    "nombre": "MT3 - Media Tensión",
+    "precio_kwh": 0.48,
+    "descripcion": "Grandes empresas e industria"
+  }
+}
