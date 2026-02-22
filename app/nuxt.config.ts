@@ -16,17 +16,12 @@ export default defineNuxtConfig({
         {
           name: "description",
           content:
-            "Calcula cuántos paneles solares necesitas para tu hogar, empresa o industria en Perú. Datos reales de 24 ciudades peruanas, inventario de equipos y retorno de inversión.",
+            "Calcula cuántos paneles solares necesitas para tu hogar, empresa o industria en Perú. Datos reales de 24 ciudades peruanas.",
         },
         {
           name: "keywords",
           content:
-            "paneles solares peru, calculadora solar, energia solar trujillo, sistema fotovoltaico",
-        },
-        { property: "og:title", content: "Calculadora Solar Perú" },
-        {
-          property: "og:description",
-          content: "La calculadora solar más completa del Perú.",
+            "paneles solares peru, calculadora solar, energia solar, sistema fotovoltaico",
         },
       ],
       link: [
@@ -38,13 +33,13 @@ export default defineNuxtConfig({
         },
         {
           rel: "stylesheet",
-          href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap",
+          href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap",
         },
       ],
     },
   },
 
-  // Importar datos JSON como assets estáticos accesibles desde /data/
+  // Datos JSON como assets estáticos accesibles desde /data/
   nitro: {
     publicAssets: [{ dir: "../data", baseURL: "/data" }],
   },

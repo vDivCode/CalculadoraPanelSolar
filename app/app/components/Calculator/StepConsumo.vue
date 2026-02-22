@@ -7,7 +7,7 @@ watch(tabActiva, (v) => {
   calc.consumoMode.value = v;
 });
 
-// ── Equipos: categoria activa ──
+// ── Equipos: categoría activa ──
 const categorias = computed(() => [
   ...new Set(calc.equiposActivos.value.map((e) => e.categoria)),
 ]);
@@ -111,28 +111,30 @@ const chips = [
   "Hotel pequeño de 20 habitaciones",
   "Taller mecánico con motores",
   "Clínica mediana 24 horas",
-  "Supermercado con refrigeración",
-  "Fábrica con motores industriales",
 ];
 </script>
 
 <template>
-  <div class="animate-fade-in-up">
-    <div class="mb-8">
+  <div class="animate-slide-up">
+    <div class="mb-7">
       <p
-        class="text-xs uppercase tracking-widest font-bold text-solar-500 mb-2"
+        class="text-xs font-semibold uppercase tracking-widest text-brand-600 mb-1"
       >
         Paso 2 de 4
       </p>
-      <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-2">
+      <h2
+        class="font-display font-bold text-2xl md:text-3xl text-navy-900 mb-1"
+      >
         ¿Cuánta energía consumes?
       </h2>
-      <p class="text-slate-400">Elige el método que mejor se adapte a ti.</p>
+      <p class="text-slate-500 text-sm">
+        Elige el método que mejor se adapte a ti.
+      </p>
     </div>
 
     <!-- Tabs -->
     <div
-      class="flex gap-1 p-1.5 bg-dark-700 rounded-xl border border-white/[0.06] mb-7"
+      class="flex gap-1 p-1 bg-slate-100 rounded-xl border border-slate-200 mb-7"
     >
       <button
         v-for="tab in [
@@ -141,11 +143,11 @@ const chips = [
           { id: 'ia', label: '🤖 Asistente IA' },
         ]"
         :key="tab.id"
-        class="flex-1 py-2.5 px-3 rounded-lg text-sm font-bold transition-all duration-200"
+        class="flex-1 py-2 px-3 rounded-lg text-sm font-semibold transition-all duration-150"
         :class="
           tabActiva === tab.id
-            ? 'bg-solar-500 text-black shadow-solar-btn'
-            : 'text-slate-400 hover:text-slate-200 hover:bg-dark-600'
+            ? 'bg-white text-navy-900 shadow-card border border-slate-200'
+            : 'text-slate-500 hover:text-slate-700'
         "
         @click="tabActiva = tab.id as any"
       >
@@ -168,20 +170,20 @@ const chips = [
             class="input-field pr-20"
           />
           <span
-            class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-solar-500"
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-bold text-brand-600"
             >kWh/mes</span
           >
         </div>
-        <p class="text-xs text-slate-600 mt-2">
+        <p class="text-xs text-slate-400 mt-2">
           📄 Lo encuentras en tu recibo de Hidrandina, Edelnor, LuzdelSur u otra
           distribuidora.
         </p>
       </div>
 
       <!-- Referencia rápida -->
-      <div class="p-4 rounded-xl bg-dark-600 border border-white/[0.06]">
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
         <p
-          class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-3"
+          class="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-3"
         >
           📊 Referencias típicas en Perú
         </p>
@@ -199,7 +201,7 @@ const chips = [
             class="text-xs text-slate-500"
           >
             {{ ref.label }}:
-            <strong class="text-solar-400">{{ ref.valor }}</strong>
+            <strong class="text-brand-700">{{ ref.valor }}</strong>
           </div>
         </div>
       </div>
@@ -208,7 +210,7 @@ const chips = [
     <!-- ── EQUIPOS ── -->
     <div
       v-show="tabActiva === 'equipos'"
-      class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5"
+      class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-5"
     >
       <!-- Lista -->
       <div>
@@ -217,11 +219,11 @@ const chips = [
           <button
             v-for="cat in categorias"
             :key="cat"
-            class="px-3 py-1.5 rounded-full text-xs font-bold border transition-all duration-200"
+            class="px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-150"
             :class="
               catActiva === cat
-                ? 'bg-solar-500/15 border-solar-500/50 text-solar-300'
-                : 'border-white/[0.07] text-slate-500 hover:border-solar-500/30 hover:text-slate-300'
+                ? 'bg-brand-600 border-brand-600 text-white'
+                : 'border-slate-200 bg-white text-slate-500 hover:border-brand-400 hover:text-brand-600'
             "
             @click="catActiva = cat"
           >
@@ -234,20 +236,19 @@ const chips = [
           <div
             v-for="eq in equiposFiltrados"
             :key="eq.id"
-            class="flex items-center gap-3 p-3 rounded-xl border transition-all duration-200"
+            class="flex items-center gap-3 p-3 rounded-xl border transition-all duration-150"
             :class="
               calc.cantidadEquipo(eq.id) > 0
-                ? 'border-solar-500/50 bg-solar-500/5'
-                : 'border-white/[0.06] bg-dark-600 hover:border-solar-500/20'
+                ? 'border-brand-300 bg-brand-50'
+                : 'border-slate-200 bg-white hover:border-brand-200'
             "
           >
-            <!-- Info -->
             <span class="text-2xl flex-shrink-0">{{ eq.icono }}</span>
             <div class="flex-1 min-w-0">
-              <div class="text-sm font-semibold text-slate-200 truncate">
+              <div class="text-sm font-semibold text-navy-900 truncate">
                 {{ eq.nombre }}
               </div>
-              <div class="text-xs text-slate-500">
+              <div class="text-xs text-slate-400">
                 {{ eq.potencia.toLocaleString() }} W
               </div>
             </div>
@@ -255,7 +256,7 @@ const chips = [
             <!-- Horas -->
             <div class="text-center flex-shrink-0">
               <div
-                class="text-[9px] text-slate-600 uppercase tracking-wide mb-0.5"
+                class="text-[9px] text-slate-400 uppercase tracking-wide mb-0.5"
               >
                 Horas/día
               </div>
@@ -268,7 +269,7 @@ const chips = [
                   calc.equiposSelec.value.find((e) => e.id === eq.id)
                     ?.horas_dia ?? 8
                 "
-                class="w-14 text-center bg-dark-700 border border-white/[0.07] rounded-lg px-2 py-1 text-xs text-slate-200 focus:outline-none focus:border-solar-500"
+                class="w-12 text-center bg-white border border-slate-200 rounded-lg px-1 py-1 text-xs text-navy-900 focus:outline-none focus:border-brand-500"
                 @change="
                   calc.actualizarHoras(
                     eq.id,
@@ -279,18 +280,18 @@ const chips = [
             </div>
 
             <!-- Cantidad -->
-            <div class="flex items-center gap-2 flex-shrink-0">
+            <div class="flex items-center gap-1.5 flex-shrink-0">
               <button
-                class="w-7 h-7 rounded-full border border-white/10 bg-dark-700 flex items-center justify-center text-slate-400 text-base font-bold hover:border-solar-500 hover:text-solar-500 transition-colors"
+                class="w-7 h-7 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-500 font-bold hover:border-brand-500 hover:text-brand-600 transition-colors"
                 @click="calc.cambiarCantidad(eq, -1)"
               >
                 −
               </button>
-              <span class="w-6 text-center font-bold text-sm text-white">
+              <span class="w-5 text-center font-semibold text-sm text-navy-900">
                 {{ calc.cantidadEquipo(eq.id) }}
               </span>
               <button
-                class="w-7 h-7 rounded-full border border-white/10 bg-dark-700 flex items-center justify-center text-slate-400 text-base font-bold hover:border-solar-500 hover:text-solar-500 transition-colors"
+                class="w-7 h-7 rounded-full border border-slate-200 bg-white flex items-center justify-center text-slate-500 font-bold hover:border-brand-500 hover:text-brand-600 transition-colors"
                 @click="calc.cambiarCantidad(eq, 1)"
               >
                 +
@@ -301,16 +302,16 @@ const chips = [
       </div>
 
       <!-- Resumen lateral -->
-      <div class="p-5 rounded-2xl border border-solar-500/20 bg-solar-500/5">
+      <div class="p-5 rounded-2xl border border-brand-200 bg-brand-50">
         <p
-          class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4"
+          class="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4"
         >
           ⚡ Resumen de consumo
         </p>
         <div class="space-y-2 max-h-48 overflow-y-auto mb-4">
           <div
             v-if="resumenEquipos.length === 0"
-            class="text-xs text-slate-600"
+            class="text-xs text-slate-400"
           >
             Sin equipos seleccionados
           </div>
@@ -319,21 +320,21 @@ const chips = [
             :key="eq.id"
             class="flex justify-between text-xs"
           >
-            <span class="text-slate-400 truncate mr-2"
+            <span class="text-slate-600 truncate mr-2"
               >{{ eq.icono }} {{ eq.nombre }} ×{{ eq.cantidad }}</span
             >
-            <span class="text-solar-400 font-bold flex-shrink-0"
+            <span class="text-brand-700 font-bold flex-shrink-0"
               >{{ eq.consumo_kwh_mes }} kWh</span
             >
           </div>
         </div>
         <div
-          class="border-t border-white/[0.07] pt-3 flex justify-between items-center"
+          class="border-t border-brand-200 pt-3 flex justify-between items-center"
         >
-          <span class="text-sm font-bold text-white">Total</span>
-          <span class="font-display font-extrabold text-2xl text-solar-500">
+          <span class="text-sm font-semibold text-navy-900">Total</span>
+          <span class="font-display font-bold text-2xl text-brand-600">
             {{ calc.consumoTotal.value.toFixed(0) }}
-            <span class="text-base">kWh/mes</span>
+            <span class="text-sm text-slate-500">kWh/mes</span>
           </span>
         </div>
       </div>
@@ -345,16 +346,16 @@ const chips = [
       <textarea
         v-model="iaTexto"
         rows="4"
-        placeholder="Ej: 'Somos una oficina de 15 personas con 12 computadoras, 2 aires acondicionados y cocina...' o 'Casa de 4 personas con lavadora, refrigeradora grande y ducha eléctrica...'"
+        placeholder="Ej: 'Somos una oficina de 15 personas con 12 computadoras, 2 aires acondicionados...'"
         class="input-field resize-none mb-3"
       />
 
-      <!-- Chips de sugerencias -->
+      <!-- Chips -->
       <div class="flex flex-wrap gap-2 mb-4">
         <button
           v-for="chip in chips"
           :key="chip"
-          class="px-3 py-1.5 rounded-full border border-white/[0.07] bg-dark-600 text-xs text-slate-400 hover:border-solar-500/40 hover:text-solar-300 hover:bg-solar-500/5 transition-all duration-200"
+          class="px-3 py-1.5 rounded-full border border-slate-200 bg-white text-xs text-slate-500 hover:border-brand-400 hover:text-brand-600 transition-all duration-150"
           @click="iaTexto = chip"
         >
           {{ chip }}
@@ -366,34 +367,45 @@ const chips = [
       </button>
 
       <!-- Resultado IA -->
-      <Transition name="fade-up">
+      <Transition name="fade">
         <div
           v-if="iaResultado"
-          class="mt-5 p-4 rounded-xl border border-emerald-500/30 bg-emerald-500/5"
+          class="mt-5 p-4 rounded-xl border border-emerald-200 bg-emerald-50"
         >
           <p
-            class="text-xs font-bold uppercase tracking-widest text-emerald-400 mb-2"
+            class="text-xs font-semibold uppercase tracking-widest text-emerald-600 mb-2"
           >
             ✅ Consumo estimado
           </p>
-          <p class="font-display font-extrabold text-3xl text-white">
+          <p class="font-display font-bold text-3xl text-navy-900">
             {{ iaResultado.consumo.toLocaleString() }}
-            <span class="text-lg text-slate-400">kWh/mes</span>
+            <span class="text-lg text-slate-500">kWh/mes</span>
           </p>
-          <p class="text-sm text-slate-400 mt-1">{{ iaResultado.desc }}</p>
-          <p class="text-[11px] text-slate-600 mt-2">
+          <p class="text-sm text-slate-600 mt-1">{{ iaResultado.desc }}</p>
+          <p class="text-[11px] text-slate-400 mt-2">
             * Para mayor precisión usa "Lista de equipos".
           </p>
         </div>
       </Transition>
     </div>
 
-    <!-- Botones navegación -->
+    <!-- Navegación -->
     <div class="flex justify-between items-center mt-10 gap-3">
       <button class="btn-secondary" @click="emit('prev')">← Anterior</button>
-      <button class="btn-primary text-base px-8 py-4" @click="emit('next')">
+      <button class="btn-primary px-8 py-3" @click="emit('next')">
         Siguiente: Tipo de sistema →
       </button>
     </div>
   </div>
 </template>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

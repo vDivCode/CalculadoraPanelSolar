@@ -29,56 +29,52 @@ const ciudadesFiltradas = computed(() =>
   }),
 );
 
-const hspGrado = (hsp: number) => {
-  if (hsp >= 6.0) return "bg-rose-500/20 text-rose-300 border-rose-500/30";
-  if (hsp >= 5.5) return "bg-solar-500/20 text-solar-300 border-solar-500/40";
-  if (hsp >= 5.0)
-    return "bg-yellow-500/20 text-yellow-300 border-yellow-500/30";
-  if (hsp >= 4.5)
-    return "bg-orange-500/20 text-orange-300 border-orange-500/30";
-  return "bg-slate-500/20 text-slate-400 border-slate-500/30";
+const hspColor = (hsp: number) => {
+  if (hsp >= 6.0) return "bg-rose-100 text-rose-700 border-rose-200";
+  if (hsp >= 5.5) return "bg-amber-100 text-amber-700 border-amber-200";
+  if (hsp >= 5.0) return "bg-yellow-100 text-yellow-700 border-yellow-200";
+  if (hsp >= 4.5) return "bg-orange-100 text-orange-700 border-orange-200";
+  return "bg-slate-100 text-slate-500 border-slate-200";
 };
 
 const siguienteHabilitado = computed(() => !!calc.perfilId.value);
 </script>
 
 <template>
-  <div class="animate-fade-in-up">
-    <!-- Header del paso -->
-    <div class="mb-8">
+  <div class="animate-slide-up">
+    <!-- Header de paso -->
+    <div class="mb-7">
       <p
-        class="text-xs uppercase tracking-widest font-bold text-solar-500 mb-2"
+        class="text-xs font-semibold uppercase tracking-widest text-brand-600 mb-1"
       >
         Paso 1 de 4
       </p>
-      <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-2">
+      <h2
+        class="font-display font-bold text-2xl md:text-3xl text-navy-900 mb-1"
+      >
         ¿Quién va a usar el sistema solar?
       </h2>
-      <p class="text-slate-400">
+      <p class="text-slate-500 text-sm">
         Selecciona tu perfil y ciudad para adaptar el cálculo a tu realidad.
       </p>
     </div>
 
     <!-- Perfiles -->
-    <div class="mb-2">
+    <div class="mb-7">
       <p class="input-label">Selecciona tu perfil</p>
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 mb-8">
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         <button
           v-for="perfil in calc.perfiles.value"
           :key="perfil.id"
-          class="card-selectable text-center py-6 px-4 group"
+          class="card-selectable text-center py-5 px-3"
           :class="calc.perfilId.value === perfil.id ? 'selected' : ''"
           @click="calc.perfilId.value = perfil.id"
         >
-          <span
-            class="block text-4xl mb-3 transition-transform duration-300 group-hover:scale-110"
-          >
-            {{ perfil.icono }}
-          </span>
-          <div class="font-bold text-sm text-white mb-1">
+          <span class="block text-3xl mb-2">{{ perfil.icono }}</span>
+          <div class="font-semibold text-sm text-navy-900 mb-0.5">
             {{ perfil.nombre }}
           </div>
-          <div class="text-[11px] text-slate-500 leading-tight">
+          <div class="text-[11px] text-slate-400 leading-tight">
             {{ perfil.descripcion }}
           </div>
         </button>
@@ -89,18 +85,18 @@ const siguienteHabilitado = computed(() => !!calc.perfilId.value);
 
     <!-- Ciudad -->
     <div class="mb-6">
-      <p class="input-label mb-3">¿En qué ciudad estás?</p>
+      <p class="input-label mb-2">¿En qué ciudad estás?</p>
 
       <!-- Tabs de región -->
-      <div class="flex gap-2 flex-wrap mb-4">
+      <div class="flex gap-2 mb-4">
         <button
           v-for="r in regionesGrupo"
           :key="r.label"
-          class="px-4 py-1.5 rounded-full text-sm font-semibold border transition-all duration-200"
+          class="px-4 py-1.5 rounded-full text-sm font-semibold border transition-all duration-150"
           :class="
             regionActiva === r.label
-              ? 'bg-solar-500 border-solar-500 text-black'
-              : 'bg-transparent border-white/10 text-slate-400 hover:border-solar-500/40 hover:text-slate-200'
+              ? 'bg-brand-600 border-brand-600 text-white'
+              : 'bg-white border-slate-200 text-slate-500 hover:border-brand-400 hover:text-brand-600'
           "
           @click="regionActiva = r.label"
         >
@@ -110,16 +106,16 @@ const siguienteHabilitado = computed(() => !!calc.perfilId.value);
 
       <!-- Grid de ciudades -->
       <div
-        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5"
+        class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2"
       >
         <button
           v-for="ciudad in ciudadesFiltradas"
           :key="ciudad.id"
-          class="flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border text-left transition-all duration-200"
+          class="flex items-center justify-between gap-2 px-3 py-2.5 rounded-xl border text-left transition-all duration-150"
           :class="
             calc.ciudadId.value === ciudad.id
-              ? 'border-solar-500 bg-solar-500/10 text-solar-200'
-              : 'border-white/[0.07] bg-dark-600 text-slate-300 hover:border-solar-500/30 hover:bg-dark-500'
+              ? 'border-brand-500 bg-brand-50 text-brand-800'
+              : 'border-slate-200 bg-white text-slate-700 hover:border-brand-300 hover:bg-brand-50/50'
           "
           @click="calc.ciudadId.value = ciudad.id"
         >
@@ -127,31 +123,30 @@ const siguienteHabilitado = computed(() => !!calc.perfilId.value);
             <div class="text-[13px] font-semibold leading-tight">
               {{ ciudad.nombre }}
             </div>
-            <div class="text-[10px] text-slate-500">{{ ciudad.region }}</div>
+            <div class="text-[10px] text-slate-400">{{ ciudad.region }}</div>
           </div>
           <span
-            class="text-[11px] font-bold px-2 py-0.5 rounded-md border flex-shrink-0"
-            :class="hspGrado(ciudad.hsp)"
+            class="text-[11px] font-bold px-1.5 py-0.5 rounded border flex-shrink-0"
+            :class="hspColor(ciudad.hsp)"
+            >{{ ciudad.hsp }}</span
           >
-            {{ ciudad.hsp }}
-          </span>
         </button>
       </div>
     </div>
 
-    <!-- Box informativo HSP -->
+    <!-- Info HSP -->
     <div
       v-if="calc.ciudadActual.value"
-      class="flex items-center gap-4 p-4 rounded-xl border border-solar-500/20 bg-solar-500/5 mt-4"
+      class="flex items-center gap-3 p-4 rounded-xl border border-brand-100 bg-brand-50 mt-4"
     >
-      <span class="text-4xl">☀️</span>
+      <span class="text-3xl">☀️</span>
       <div>
-        <div class="font-bold text-solar-300 text-base">
+        <div class="font-semibold text-brand-800 text-sm">
           {{ calc.ciudadActual.value.nombre }} —
-          <span class="text-solar-500"
+          <span class="text-brand-600"
             >{{ calc.ciudadActual.value.hsp }} HSP</span
           >
-          <span class="ml-2 text-sm" :class="calc.hspInfo.value.color">{{
+          <span class="ml-1.5 text-xs text-slate-500">{{
             calc.hspInfo.value.nivel
           }}</span>
         </div>
@@ -165,11 +160,11 @@ const siguienteHabilitado = computed(() => !!calc.perfilId.value);
     <!-- Botón siguiente -->
     <div class="flex justify-end mt-8">
       <button
-        class="btn-primary text-base px-8 py-4 disabled:opacity-40 disabled:cursor-not-allowed disabled:transform-none"
+        class="btn-primary px-8 py-3 text-sm disabled:opacity-40 disabled:cursor-not-allowed"
         :disabled="!siguienteHabilitado"
         @click="emit('next')"
       >
-        Siguiente: Mi consumo <span class="text-lg">→</span>
+        Siguiente: Mi consumo →
       </button>
     </div>
   </div>

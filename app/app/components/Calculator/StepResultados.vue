@@ -6,7 +6,7 @@ const emit = defineEmits<{ recalcular: [] }>();
 const calc = useCalculadora();
 const r = computed(() => calc.resultado.value);
 
-// ── Chart de producción mensual ──
+// ── Chart producción mensual ──
 const chartRef = ref<HTMLCanvasElement | null>(null);
 let chartInstance: Chart | null = null;
 
@@ -29,12 +29,12 @@ const montarChart = () => {
                 v.produccion > arr[mx].produccion ? idx : mx,
               0,
             )
-              ? "rgba(251, 191, 36, 0.95)"
-              : "rgba(251, 191, 36, 0.45)",
+              ? "rgba(37, 99, 235, 0.90)"
+              : "rgba(59, 130, 246, 0.35)",
           ),
-          borderColor: "rgba(245, 158, 11, 0.8)",
-          borderWidth: 2,
-          borderRadius: 8,
+          borderColor: "rgba(37, 99, 235, 0.6)",
+          borderWidth: 1.5,
+          borderRadius: 6,
           borderSkipped: false,
         },
       ],
@@ -45,11 +45,11 @@ const montarChart = () => {
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: "#141d35",
-          borderColor: "rgba(245,158,11,0.3)",
+          backgroundColor: "#ffffff",
+          borderColor: "#e2e8f0",
           borderWidth: 1,
-          titleColor: "#f59e0b",
-          bodyColor: "#94a3b8",
+          titleColor: "#1e3a8a",
+          bodyColor: "#64748b",
           callbacks: {
             label: (ctx) => ` ${ctx.parsed.y.toLocaleString("es-PE")} kWh`,
           },
@@ -57,13 +57,13 @@ const montarChart = () => {
       },
       scales: {
         x: {
-          grid: { color: "rgba(255,255,255,0.04)" },
-          ticks: { color: "#64748b", font: { size: 11, weight: "bold" } },
+          grid: { color: "rgba(0,0,0,0.04)" },
+          ticks: { color: "#94a3b8", font: { size: 11, weight: "bold" } },
         },
         y: {
-          grid: { color: "rgba(255,255,255,0.04)" },
+          grid: { color: "rgba(0,0,0,0.04)" },
           ticks: {
-            color: "#64748b",
+            color: "#94a3b8",
             font: { size: 11 },
             callback: (v) => `${Number(v).toLocaleString()} kWh`,
           },
@@ -81,153 +81,162 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="animate-fade-in-up">
-    <!-- Loading state -->
-    <div v-if="calc.calculando.value" class="text-center py-24">
+  <div class="animate-slide-up">
+    <!-- Loading -->
+    <div v-if="calc.calculando.value" class="text-center py-20">
       <div class="inline-flex flex-col items-center gap-4">
         <div
-          class="w-16 h-16 rounded-full border-4 border-solar-500/20 border-t-solar-500 animate-spin"
+          class="w-12 h-12 rounded-full border-4 border-brand-200 border-t-brand-600 animate-spin"
         />
-        <p class="text-solar-400 font-bold">Calculando tu sistema solar...</p>
-        <p class="text-slate-500 text-sm">
+        <p class="text-brand-700 font-semibold">
+          Calculando tu sistema solar...
+        </p>
+        <p class="text-slate-400 text-sm">
           Analizando datos de {{ calc.ciudadActual.value?.nombre }}
         </p>
       </div>
     </div>
 
     <!-- Sin resultado -->
-    <div v-else-if="!r" class="text-center py-24 text-slate-500">
+    <div v-else-if="!r" class="text-center py-20 text-slate-400">
       No hay resultados aún.
     </div>
 
     <!-- ── RESULTADOS ── -->
     <template v-else>
-      <div class="mb-8">
+      <div class="mb-7">
         <p
-          class="text-xs uppercase tracking-widest font-bold text-solar-500 mb-2"
+          class="text-xs font-semibold uppercase tracking-widest text-brand-600 mb-1"
         >
           Paso 4 de 4 · Resultados
         </p>
-        <h2 class="font-display font-bold text-3xl md:text-4xl text-white mb-2">
+        <h2
+          class="font-display font-bold text-2xl md:text-3xl text-navy-900 mb-1"
+        >
           Tu sistema solar en {{ r.ciudad.nombre }}
         </h2>
-        <p class="text-slate-400">
+        <p class="text-slate-500 text-sm">
           {{ r.modo_sistema }} · {{ r.panel.nombre }} ·
           {{ calc.fmt.kwh(r.consumo_kwh_mes) }}/mes
         </p>
       </div>
 
       <!-- ── KPIs PRINCIPALES ── -->
-      <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
-        <div class="kpi-card kpi-solar col-span-2 md:col-span-1">
+      <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 mb-7">
+        <div class="kpi-blue col-span-2 md:col-span-1">
           <div
-            class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2"
+            class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-1.5"
           >
             Paneles
           </div>
-          <div class="font-display font-extrabold text-5xl text-white">
+          <div class="font-display font-bold text-4xl text-navy-900">
             {{ r.num_paneles }}
           </div>
-          <div class="text-xs text-slate-500 mt-1">
+          <div class="text-xs text-slate-400 mt-1">
             {{ r.potencia_total_kw }} kWp total
           </div>
         </div>
-        <div class="kpi-card kpi-blue">
+
+        <div class="kpi-blue">
           <div
-            class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2"
+            class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-1.5"
           >
             Inversor
           </div>
-          <div class="font-display font-extrabold text-3xl text-white">
+          <div class="font-display font-bold text-2xl text-navy-900">
             {{ r.inversor_kw
-            }}<span class="text-lg text-slate-500 ml-1">kW</span>
+            }}<span class="text-sm text-slate-400 ml-1">kW</span>
           </div>
-          <div class="text-xs text-slate-500 mt-1">Potencia instalada</div>
+          <div class="text-xs text-slate-400 mt-1">Potencia instalada</div>
         </div>
-        <div class="kpi-card kpi-green">
+
+        <div class="kpi-green">
           <div
-            class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2"
+            class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-1.5"
           >
             Ahorro/mes
           </div>
-          <div class="font-display font-extrabold text-2xl text-white">
+          <div class="font-display font-bold text-xl text-navy-900">
             {{ calc.fmt.pen(r.ahorro_mes_pen) }}
           </div>
-          <div class="text-xs text-slate-500 mt-1">
+          <div class="text-xs text-slate-400 mt-1">
             {{ calc.fmt.usd(r.ahorro_anio_usd / 12) }} USD/mes
           </div>
         </div>
-        <div class="kpi-card kpi-purple">
+
+        <div class="kpi-violet">
           <div
-            class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2"
+            class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-1.5"
           >
             Retorno
           </div>
-          <div class="font-display font-extrabold text-3xl text-white">
+          <div class="font-display font-bold text-2xl text-navy-900">
             {{ r.payback_anios
-            }}<span class="text-lg text-slate-500 ml-1">años</span>
+            }}<span class="text-sm text-slate-400 ml-1">años</span>
           </div>
-          <div class="text-xs text-slate-500 mt-1">Recupero de inversión</div>
+          <div class="text-xs text-slate-400 mt-1">Recupero de inversión</div>
         </div>
-        <div class="kpi-card kpi-green">
+
+        <div class="kpi-green">
           <div
-            class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2"
+            class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-1.5"
           >
             CO₂ evitado
           </div>
-          <div class="font-display font-extrabold text-3xl text-white">
+          <div class="font-display font-bold text-xl text-navy-900">
             {{ r.co2_evitado_anio_kg
-            }}<span class="text-lg text-slate-500 ml-1">kg/año</span>
+            }}<span class="text-sm text-slate-400 ml-1">kg/año</span>
           </div>
-          <div class="text-xs text-slate-500 mt-1">
+          <div class="text-xs text-slate-400 mt-1">
             {{ r.arboles_equivalentes }} árboles
           </div>
         </div>
-        <div class="kpi-card kpi-solar">
+
+        <div class="kpi-amber">
           <div
-            class="text-xs text-slate-500 font-bold uppercase tracking-widest mb-2"
+            class="text-xs text-slate-500 font-semibold uppercase tracking-widest mb-1.5"
           >
-            Área necesaria
+            Área
           </div>
-          <div class="font-display font-extrabold text-3xl text-white">
+          <div class="font-display font-bold text-2xl text-navy-900">
             {{ r.area_total_m2
-            }}<span class="text-lg text-slate-500 ml-1">m²</span>
+            }}<span class="text-sm text-slate-400 ml-1">m²</span>
           </div>
-          <div class="text-xs text-slate-500 mt-1">Techo requerido</div>
+          <div class="text-xs text-slate-400 mt-1">Techo requerido</div>
         </div>
       </div>
 
-      <!-- ── GRÁFICO DE PRODUCCIÓN MENSUAL ── -->
+      <!-- ── GRÁFICO ── -->
       <div class="card mb-6">
         <div class="flex items-center justify-between mb-5">
           <div>
-            <h3 class="font-display font-bold text-lg text-white">
+            <h3 class="font-display font-semibold text-base text-navy-900">
               Producción mensual estimada
             </h3>
-            <p class="text-xs text-slate-500">
+            <p class="text-xs text-slate-400">
               Variación estacional para {{ r.ciudad.nombre }}
             </p>
           </div>
           <div class="text-right">
-            <div class="text-xs text-slate-500">Anual</div>
-            <div class="font-bold text-solar-400">
+            <div class="text-xs text-slate-400">Anual</div>
+            <div class="font-semibold text-brand-600 text-sm">
               {{ calc.fmt.kwh(r.energia_generada_anio) }}
             </div>
           </div>
         </div>
-        <div class="h-56">
+        <div class="h-52">
           <canvas ref="chartRef" />
         </div>
       </div>
 
       <!-- ── COSTOS + RETORNO ── -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5">
         <!-- Desglose de costos -->
         <div class="card">
-          <h3 class="font-display font-bold text-lg text-white mb-5">
+          <h3 class="font-display font-semibold text-base text-navy-900 mb-4">
             💰 Inversión detallada
           </h3>
-          <div class="space-y-2.5">
+          <div class="space-y-2">
             <div
               v-for="item in [
                 {
@@ -256,28 +265,28 @@ onUnmounted(() => {
                 { label: 'IGV (18%)', valor: r.igv_usd },
               ].filter((i) => !i.hide)"
               :key="item.label"
-              class="flex justify-between items-center py-2 border-b border-white/[0.05] last:border-0"
+              class="flex justify-between items-center py-2 border-b border-slate-100 last:border-0"
             >
-              <span class="text-sm text-slate-400">{{ item.label }}</span>
+              <span class="text-sm text-slate-600">{{ item.label }}</span>
               <div class="text-right">
-                <div class="text-sm font-bold text-white">
+                <div class="text-sm font-semibold text-navy-900">
                   {{ calc.fmt.usd(item.valor) }}
                 </div>
-                <div class="text-[11px] text-slate-600">
+                <div class="text-[11px] text-slate-400">
                   {{ calc.fmt.pen(item.valor * 3.75) }}
                 </div>
               </div>
             </div>
           </div>
           <div
-            class="mt-4 p-4 rounded-xl bg-solar-500/10 border border-solar-500/30 flex justify-between items-center"
+            class="mt-4 p-3 rounded-xl bg-brand-50 border border-brand-200 flex justify-between items-center"
           >
-            <span class="font-bold text-sm text-solar-400">TOTAL</span>
+            <span class="font-semibold text-sm text-brand-700">TOTAL</span>
             <div class="text-right">
-              <div class="font-display font-extrabold text-2xl text-white">
+              <div class="font-display font-bold text-xl text-navy-900">
                 {{ calc.fmt.usd(r.costo_total_usd) }}
               </div>
-              <div class="text-sm text-solar-400">
+              <div class="text-sm text-brand-600">
                 {{ calc.fmt.pen(r.costo_total_pen) }}
               </div>
             </div>
@@ -288,10 +297,10 @@ onUnmounted(() => {
         <div class="space-y-4">
           <!-- Retorno 25 años -->
           <div class="card">
-            <h3 class="font-display font-bold text-lg text-white mb-4">
+            <h3 class="font-display font-semibold text-base text-navy-900 mb-4">
               📈 Retorno en 25 años
             </h3>
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-3">
               <div
                 v-for="kpi in [
                   {
@@ -317,18 +326,16 @@ onUnmounted(() => {
                 ]"
                 :key="kpi.label"
               >
-                <div
-                  class="p-3 rounded-xl bg-dark-600 border border-white/[0.06]"
-                >
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200">
                   <div
-                    class="text-[10px] text-slate-600 uppercase tracking-widest mb-1"
+                    class="text-[10px] text-slate-400 uppercase tracking-widest mb-1"
                   >
                     {{ kpi.label }}
                   </div>
-                  <div class="font-bold text-base text-solar-400">
+                  <div class="font-semibold text-sm text-brand-700">
                     {{ kpi.val }}
                   </div>
-                  <div class="text-[10px] text-slate-600 mt-0.5">
+                  <div class="text-[10px] text-slate-400 mt-0.5">
                     {{ kpi.sub }}
                   </div>
                 </div>
@@ -338,13 +345,13 @@ onUnmounted(() => {
 
           <!-- Impacto ambiental -->
           <div class="card">
-            <h3 class="font-display font-bold text-base text-white mb-4">
+            <h3 class="font-display font-semibold text-sm text-navy-900 mb-4">
               🌿 Impacto ambiental
             </h3>
-            <div class="grid grid-cols-3 gap-3">
+            <div class="grid grid-cols-3 gap-2.5">
               <div class="eco-card">
-                <div class="text-2xl mb-1">🌍</div>
-                <div class="font-bold text-xl text-emerald-400">
+                <div class="text-xl mb-1">🌍</div>
+                <div class="font-bold text-lg text-emerald-600">
                   {{ r.co2_evitado_25_anios_toneladas }}
                 </div>
                 <div class="text-[10px] text-slate-500 mt-0.5">
@@ -352,8 +359,8 @@ onUnmounted(() => {
                 </div>
               </div>
               <div class="eco-card">
-                <div class="text-2xl mb-1">🌳</div>
-                <div class="font-bold text-xl text-emerald-400">
+                <div class="text-xl mb-1">🌳</div>
+                <div class="font-bold text-lg text-emerald-600">
                   {{ r.arboles_equivalentes.toLocaleString() }}
                 </div>
                 <div class="text-[10px] text-slate-500 mt-0.5">
@@ -361,8 +368,8 @@ onUnmounted(() => {
                 </div>
               </div>
               <div class="eco-card">
-                <div class="text-2xl mb-1">⚡</div>
-                <div class="font-bold text-xl text-emerald-400">
+                <div class="text-xl mb-1">⚡</div>
+                <div class="font-bold text-base text-emerald-600">
                   {{ calc.fmt.kwh(r.energia_generada_anio) }}
                 </div>
                 <div class="text-[10px] text-slate-500 mt-0.5">
@@ -374,12 +381,12 @@ onUnmounted(() => {
         </div>
       </div>
 
-      <!-- ── RESUMEN TÉCNICO ── -->
+      <!-- ── FICHA TÉCNICA ── -->
       <div class="card mb-8">
-        <h3 class="font-display font-bold text-lg text-white mb-4">
+        <h3 class="font-display font-semibold text-base text-navy-900 mb-4">
           🔧 Especificaciones técnicas
         </h3>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           <div
             v-for="spec in [
               { label: 'Ciudad', val: r.ciudad.nombre },
@@ -401,19 +408,21 @@ onUnmounted(() => {
               { label: 'Factor CO₂ Perú', val: '0.5568 kg/kWh' },
             ]"
             :key="spec.label"
-            class="p-3 rounded-xl bg-dark-600 border border-white/[0.05]"
+            class="p-3 rounded-xl bg-slate-50 border border-slate-200"
           >
             <div
-              class="text-[10px] text-slate-600 uppercase tracking-widest mb-1"
+              class="text-[10px] text-slate-400 uppercase tracking-widest mb-1"
             >
               {{ spec.label }}
             </div>
-            <div class="text-sm font-bold text-slate-200">{{ spec.val }}</div>
+            <div class="text-sm font-semibold text-navy-900">
+              {{ spec.val }}
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Botón recalcular -->
+      <!-- Recalcular -->
       <div class="text-center">
         <button class="btn-outline" @click="emit('recalcular')">
           🔄 Recalcular con otros datos
