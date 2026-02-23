@@ -38,9 +38,4 @@ export default defineNuxtConfig({
       ],
     },
   },
-
-  // Datos JSON como assets estáticos accesibles desde /data/
-  nitro: {
-    publicAssets: [{ dir: "../data", baseURL: "/data" }],
-  },
 });
