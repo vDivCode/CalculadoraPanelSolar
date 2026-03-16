@@ -1,9 +1,0 @@
-{
-  "css.customData": [],
-  "css.validate": false,
-  "scss.validate": false,
-  "tailwindCSS.includeLanguages": {
-    "html": "html",
-    "vue": "html"
-  }
-}
