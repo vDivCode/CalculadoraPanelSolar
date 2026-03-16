@@ -1,14 +1,30 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Home, Factory, HardHat, Zap, Sun, MapPin, Calculator, Battery, CheckCircle2 } from 'lucide-react';
+import { Home, Factory, HardHat, Zap, Sun, MapPin, Calculator, Battery, CheckCircle2, Tv, RefreshCcw, Coffee, MonitorSmartphone, Fan, Snowflake } from 'lucide-react';
 
 type PropertyType = 'Hogar' | 'Empresa' | 'Minas';
 
 const propertyOptions: { id: PropertyType; label: string; icon: React.ReactNode; defaultConsumption: number; desc: string }[] = [
   { id: 'Hogar', label: 'Hogar', icon: <Home className="w-8 h-8" />, defaultConsumption: 300, desc: 'Consumo residencial típico' },
   { id: 'Empresa', label: 'Empresa', icon: <Factory className="w-8 h-8" />, defaultConsumption: 2500, desc: 'Negocios y oficinas' },
-  { id: 'Minas', label: 'Minería', icon: <HardHat className="w-8 h-8" />, defaultConsumption: 50000, desc: 'Procesos industriales' },
+  { id: 'Minas', label: 'Minería', icon: <HardHat className="w-8 h-8" />, defaultConsumption: 50000, desc: 'Procesos industriales pesados' },
+];
+
+type Appliance = {
+  id: string;
+  name: string;
+  icon: React.ReactNode;
+  kwhPerMonth: number;
+};
+
+const commonAppliances: Appliance[] = [
+  { id: 'fridge', name: 'Refrigerador', icon: <Snowflake className="w-5 h-5" />, kwhPerMonth: 50 },
+  { id: 'tv', name: 'Televisor', icon: <Tv className="w-5 h-5" />, kwhPerMonth: 15 },
+  { id: 'washer', name: 'Lavadora', icon: <RefreshCcw className="w-5 h-5" />, kwhPerMonth: 25 },
+  { id: 'coffee', name: 'Cafetera', icon: <Coffee className="w-5 h-5" />, kwhPerMonth: 10 },
+  { id: 'pc', name: 'Computadora', icon: <MonitorSmartphone className="w-5 h-5" />, kwhPerMonth: 30 },
+  { id: 'ac', name: 'Aire Acondicionado', icon: <Fan className="w-5 h-5" />, kwhPerMonth: 120 },
 ];
 
 export default function SolarCalculator() {
@@ -17,10 +33,38 @@ export default function SolarCalculator() {
   const [panelWattage, setPanelWattage] = useState<number>(550);
   const [sunHours, setSunHours] = useState<number>(4.5);
   
+  // Appliance tracking
+  const [useAppliances, setUseAppliances] = useState(false);
+  const [applianceCounts, setApplianceCounts] = useState<Record<string, number>>({});
+  
   // Results
   const [panelsNeeded, setPanelsNeeded] = useState<number>(0);
   const [systemSizeKW, setSystemSizeKW] = useState<number>(0);
   const [requiredArea, setRequiredArea] = useState<number>(0);
+
+  // Recalculate consumption based on appliances
+  useEffect(() => {
+    if (useAppliances) {
+      let totalKwh = 0;
+      commonAppliances.forEach(app => {
+        const count = applianceCounts[app.id] || 0;
+        totalKwh += (count * app.kwhPerMonth);
+      });
+      setMonthlyKwh(totalKwh === 0 ? 50 : totalKwh); // Prevent 0
+    }
+  }, [applianceCounts, useAppliances]);
+
+  // Adjust Panel Wattage automatically based on total consumption
+  useEffect(() => {
+    if (monthlyKwh > 10000) {
+      setPanelWattage(600); // Industrial panel needed
+    } else if (monthlyKwh > 1000) {
+      setPanelWattage(550); // Premium panel for Enterprise
+    } else {
+      // Keep user choice or default to 450W for home
+      if (panelWattage > 550) setPanelWattage(450); 
+    }
+  }, [monthlyKwh]);
 
   useEffect(() => {
     // Math:
@@ -46,27 +90,37 @@ export default function SolarCalculator() {
 
   const handlePropertyChange = (ptype: PropertyType, defaultVal: number) => {
     setPropertyType(ptype);
-    setMonthlyKwh(defaultVal);
+    if (!useAppliances) {
+      setMonthlyKwh(defaultVal);
+    }
+  };
+
+  const incrementAppliance = (id: string) => {
+    setApplianceCounts(prev => ({ ...prev, [id]: (prev[id] || 0) + 1 }));
+  };
+
+  const decrementAppliance = (id: string) => {
+    setApplianceCounts(prev => ({ ...prev, [id]: Math.max(0, (prev[id] || 0) - 1) }));
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-emerald-500/30 overflow-hidden relative">
-      {/* Background gradients */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-600/20 rounded-full blur-[120px] pointer-events-none" />
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-cyan-500/30 overflow-hidden relative">
+      {/* Background gradients for Hidrosolar Palette (Blue/Cyan tones) */}
+      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan-600/20 rounded-full blur-[120px] pointer-events-none" />
       
       <main className="relative max-w-6xl mx-auto px-6 py-16">
         {/* Header */}
         <header className="text-center mb-16 space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-sm font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 text-sm font-medium mb-4">
             <Sun className="w-4 h-4" />
-            Empieza a ahorrar hoy
+            Empieza a ahorrar hoy con HidroSolar
           </div>
           <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight">
-            Calculadora <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Solar</span>
+            Calculadora <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">Solar</span>
           </h1>
           <p className="text-slate-400 max-w-2xl mx-auto text-lg">
-            Descubre exactamente cuántos paneles necesitas para potenciar tu {propertyType.toLowerCase()} con energía limpia y renovable.
+            Descubre exactamente cuántos paneles necesitas para potenciar tu {propertyType.toLowerCase()} de madera inteligente y renovable.
           </p>
         </header>
 
@@ -88,17 +142,17 @@ export default function SolarCalculator() {
                     onClick={() => handlePropertyChange(opt.id, opt.defaultConsumption)}
                     className={`relative p-6 rounded-2xl border text-left transition-all duration-300 group
                       ${propertyType === opt.id 
-                        ? 'bg-emerald-500/10 border-emerald-500/50 ring-1 ring-emerald-500/50' 
+                        ? 'bg-blue-500/10 border-blue-500/50 ring-1 ring-blue-500/50' 
                         : 'bg-slate-900 border-slate-800 hover:border-slate-700 hover:bg-slate-800'}`}
                   >
-                    <div className={`${propertyType === opt.id ? 'text-emerald-400' : 'text-slate-400 group-hover:text-slate-300'}`}>
+                    <div className={`${propertyType === opt.id ? 'text-blue-400' : 'text-slate-400 group-hover:text-slate-300'}`}>
                       {opt.icon}
                     </div>
                     <h3 className="mt-4 font-semibold text-lg">{opt.label}</h3>
                     <p className="text-xs text-slate-500 mt-1">{opt.desc}</p>
                     
                     {propertyType === opt.id && (
-                      <div className="absolute top-4 right-4 text-emerald-500">
+                      <div className="absolute top-4 right-4 text-blue-500">
                         <CheckCircle2 className="w-5 h-5" />
                       </div>
                     )}
@@ -109,47 +163,80 @@ export default function SolarCalculator() {
 
             {/* Energy Consumption */}
             <div className="space-y-6 pt-6 border-t border-slate-800">
-              <div className="flex justify-between items-end">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h2 className="text-xl font-semibold flex items-center gap-2">
                   <span className="flex items-center justify-center w-8 h-8 rounded-full bg-slate-800 border border-slate-700 text-sm">2</span>
-                  Consumo Mensual Averiguado
+                  Consumo Mensual Estimado
                 </h2>
-                <span className="text-2xl font-bold text-emerald-400">{monthlyKwh.toLocaleString()} <span className="text-sm font-medium text-slate-500">kWh</span></span>
+                
+                {propertyType === 'Hogar' && (
+                  <button 
+                    onClick={() => setUseAppliances(!useAppliances)}
+                    className="text-sm px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-cyan-400 font-medium transition-colors"
+                  >
+                    {useAppliances ? 'Ingresar kWh manualmente' : 'No sé mi consumo...'}
+                  </button>
+                )}
               </div>
               
-              <div className="p-1">
-                <input 
-                  type="range" 
-                  min={100} 
-                  max={propertyType === 'Minas' ? 1000000 : propertyType === 'Empresa' ? 20000 : 2000} 
-                  step={propertyType === 'Minas' ? 10000 : 50}
-                  value={monthlyKwh} 
-                  onChange={(e) => setMonthlyKwh(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-                />
-                <div className="flex justify-between text-xs text-slate-500 mt-2 font-medium">
-                  <span>Mínimo</span>
-                  <span>Máximo</span>
-                </div>
+              <div className="flex justify-end">
+                 <span className="text-3xl font-bold text-blue-400">{monthlyKwh.toLocaleString()} <span className="text-lg font-medium text-slate-500">kWh</span></span>
               </div>
+
+              {!useAppliances ? (
+                <div className="p-1">
+                  <input 
+                    type="range" 
+                    min={100} 
+                    max={propertyType === 'Minas' ? 1000000 : propertyType === 'Empresa' ? 20000 : 2000} 
+                    step={propertyType === 'Minas' ? 10000 : 50}
+                    value={monthlyKwh} 
+                    onChange={(e) => setMonthlyKwh(Number(e.target.value))}
+                    className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                  />
+                  <div className="flex justify-between text-xs text-slate-500 mt-2 font-medium">
+                    <span>Mínimo</span>
+                    <span>Máximo</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid sm:grid-cols-2 gap-3 p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
+                  {commonAppliances.map((app) => (
+                    <div key={app.id} className="flex items-center justify-between p-3 bg-slate-950 rounded-xl border border-slate-800">
+                      <div className="flex items-center gap-3">
+                        <div className="text-blue-400 bg-blue-500/10 p-2 rounded-lg">{app.icon}</div>
+                        <div>
+                          <p className="text-sm font-medium">{app.name}</p>
+                          <p className="text-xs text-slate-500">~{app.kwhPerMonth} kWh/mes</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 bg-slate-900 rounded-lg p-1 border border-slate-800">
+                        <button onClick={() => decrementAppliance(app.id)} className="w-8 h-8 rounded flex items-center justify-center hover:bg-slate-800 font-bold">-</button>
+                        <span className="w-4 text-center text-sm font-semibold">{applianceCounts[app.id] || 0}</span>
+                        <button onClick={() => incrementAppliance(app.id)} className="w-8 h-8 rounded flex items-center justify-center hover:bg-slate-800 font-bold text-blue-400">+</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Advanced Settings */}
               <div className="grid sm:grid-cols-2 gap-4 mt-8">
                 <div className="bg-slate-900 p-5 rounded-xl border border-slate-800">
                   <label className="block text-sm font-medium text-slate-400 mb-2">
-                    Potencia del Panel (Watts)
+                    Potencia del Panel (Selección Auto.)
                   </label>
                   <div className="relative">
                     <Zap className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                     <select 
                       value={panelWattage}
                       onChange={(e) => setPanelWattage(Number(e.target.value))}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2.5 pl-10 pr-4 appearance-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2.5 pl-10 pr-4 appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
                     >
-                      <option value={400}>400W (Estándar)</option>
-                      <option value={450}>450W (Medio)</option>
-                      <option value={550}>550W (Premium)</option>
-                      <option value={600}>600W (Industrial)</option>
+                      <option value={400}>400W (Básico)</option>
+                      <option value={450}>450W (Hogar Estándar)</option>
+                      <option value={550}>550W (Empresa / Premium)</option>
+                      <option value={600}>600W (Industrial / Minas)</option>
                     </select>
                   </div>
                 </div>
@@ -167,7 +254,7 @@ export default function SolarCalculator() {
                       max="10"
                       value={sunHours}
                       onChange={(e) => setSunHours(Number(e.target.value))}
-                      className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white"
+                      className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2.5 pl-10 pr-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-white"
                     />
                   </div>
                 </div>
@@ -180,10 +267,10 @@ export default function SolarCalculator() {
           <div className="lg:col-span-5 relative">
             <div className="sticky top-8 bg-slate-900/50 backdrop-blur-xl border border-slate-800 p-8 rounded-3xl shadow-2xl overflow-hidden ring-1 ring-white/5">
               {/* Decorative elements behind results */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-bl-full pointer-events-none" />
+              <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-bl-full pointer-events-none" />
               
               <div className="flex items-center gap-3 mb-8">
-                <Calculator className="w-6 h-6 text-emerald-400" />
+                <Calculator className="w-6 h-6 text-blue-400" />
                 <h2 className="text-xl font-bold">Resultados Estimados</h2>
               </div>
 
@@ -194,9 +281,9 @@ export default function SolarCalculator() {
                   <div className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-slate-400">
                     {panelsNeeded}
                   </div>
-                  <div className="text-emerald-400 text-sm font-medium mt-2 flex items-center justify-center gap-1">
+                  <div className="text-blue-400 text-sm font-medium mt-2 flex items-center justify-center gap-1">
                     <Battery className="w-4 h-4" />
-                    Cobrirá el 100% de tu consumo
+                    Cubrirá el 100% de tu consumo
                   </div>
                 </div>
 
@@ -208,24 +295,24 @@ export default function SolarCalculator() {
                   </div>
                   
                   <div className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                    <span className="text-slate-400">Área de Techo Requerida</span>
+                    <span className="text-slate-400">Área de Instalación Aprox.</span>
                     <span className="font-semibold text-lg">{requiredArea.toLocaleString()} m²</span>
                   </div>
                   
                   <div className="flex items-center justify-between p-4 rounded-xl bg-slate-800/50 border border-slate-700/50">
-                    <span className="text-slate-400">Producción Anual Estimada</span>
+                    <span className="text-slate-400">Producción Anual</span>
                     <span className="font-semibold text-lg text-cyan-400">
                       {(systemSizeKW * sunHours * 365).toLocaleString('en-US', { maximumFractionDigits: 0 })} kWh
                     </span>
                   </div>
                 </div>
 
-                <button className="w-full py-4 rounded-xl font-bold text-slate-950 bg-gradient-to-r from-emerald-400 to-cyan-400 hover:from-emerald-300 hover:to-cyan-300 transition-all active:scale-[0.98] shadow-[0_0_30px_-5px_#34d399]">
+                <button className="w-full py-4 rounded-xl font-bold text-slate-950 bg-gradient-to-r from-blue-400 to-cyan-400 hover:from-blue-300 hover:to-cyan-300 transition-all active:scale-[0.98] shadow-[0_0_30px_-5px_#3b82f6]">
                   Obtener Cotización Formal
                 </button>
 
                 <p className="text-xs text-center text-slate-500">
-                  * Este es un cálculo estimado basado en eficiencia típica (80%). El requerimiento real puede variar según la orientación, sombras y clima local.
+                  * Fórmulas matemáticas basadas en una eficiencia del sistema del 80% (pérdidas estándar en inversores, cables y temperatura).
                 </p>
               </div>
             </div>
