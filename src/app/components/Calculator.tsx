@@ -301,7 +301,14 @@ export default function SolarCalculator() {
                 </div>
 
                 <div className="pt-4">
-                  <button className="w-full py-4 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-md active:scale-[0.98]">
+                  <button 
+                    onClick={() => {
+                      const phoneNumber = '51999999999'; // REEMPLAZA ESTO ÚNICAMENTE CON TU NÚMERO (ej. 51987654321)
+                      const message = `¡Hola Equipo HidroSolar! 👋%0A%0AAcabo de usar su calculadora y me gustaría una *Cotización Formal*. Estos son mis datos aproximados:%0A%0A🏠 *Tipo Propiedad:* ${propertyType}%0A⚡ *Consumo Estimado:* ${monthlyKwh} kWh/mes%0A☀️ *Paneles Sugeridos:* ${panelsNeeded}%0A📏 *Área Aprox:* ${requiredArea.toLocaleString()} m²%0A%0A¿Podrían contactarme para afinar los detalles?`;
+                      window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+                    }}
+                    className="w-full py-4 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-md active:scale-[0.98] flex items-center justify-center gap-2"
+                  >
                     Obtener Cotización Formal
                   </button>
                   <p className="text-xs text-center text-slate-500 mt-4 leading-relaxed">
