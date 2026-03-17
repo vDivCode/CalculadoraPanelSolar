@@ -1,9 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Download, Save, DollarSign, Plug, Sun, Zap, MapPin } from 'lucide-react';
+import { Download, Save, DollarSign, Plug, Sun, Zap, MapPin, CheckCircle } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
 
 export default function DashboardCalculator() {
+  // UI States
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
   // Client Data
   const [clientName, setClientName] = useState('');
   const [clientPhone, setClientPhone] = useState('');
@@ -61,6 +66,44 @@ export default function DashboardCalculator() {
     setTaxes(calculatedTax);
     setTotalPrice(finalPrice);
   }, [monthlyKwh, sunHours, panelWattage, costPerPanel, costInverter, costStructurePerPanel, costLabor, taxRate]);
+
+  const handleSave = async () => {
+    if (!clientName.trim()) {
+      alert("Por favor ingrese el Nombre Completo del cliente.");
+      return;
+    }
+
+    setIsSaving(true);
+    setSaveSuccess(false);
+
+    try {
+      const { error } = await supabase
+        .from('formal_quotes')
+        .insert([
+          {
+            client_name: clientName,
+            client_phone: clientPhone,
+            client_address: clientAddress,
+            monthly_kwh: monthlyKwh,
+            sun_hours: sunHours,
+            panel_wattage: panelWattage,
+            panels_needed: panelsNeeded,
+            system_size_kw: systemSizeKW,
+            total_price: totalPrice,
+          }
+        ]);
+
+      if (error) throw error;
+      
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000); // Reset success message after 3 seconds
+    } catch (error) {
+      console.error('Error al guardar la cotización:', error);
+      alert("Ocurrió un error al conectar con Supabase. Verifica tu conexión.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <>
@@ -213,8 +256,23 @@ export default function DashboardCalculator() {
 
         {/* Action Buttons */}
         <div className="flex gap-4">
-          <button className="flex-1 py-4 bg-white hover:bg-slate-50 text-slate-700 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors border border-slate-300 shadow-sm">
-            <Save className="w-5 h-5 text-slate-400" /> Guardar
+          <button 
+            onClick={handleSave}
+            disabled={isSaving}
+            className={`flex-1 py-4 hover:bg-slate-50 rounded-xl font-bold flex items-center justify-center gap-2 transition-colors border shadow-sm ${
+              saveSuccess 
+                ? 'bg-green-50 border-green-500 text-green-700 ring-1 ring-green-500' 
+                : 'bg-white text-slate-700 border-slate-300'
+            }`}
+          >
+            {isSaving ? (
+              <span className="w-5 h-5 border-2 border-slate-400 border-t-transparent rounded-full animate-spin" />
+            ) : saveSuccess ? (
+              <CheckCircle className="w-5 h-5 text-green-600" />
+            ) : (
+              <Save className="w-5 h-5 text-slate-400" />
+            )}
+            {isSaving ? 'Guardando...' : saveSuccess ? '¡Guardado!' : 'Guardar'}
           </button>
           <button 
             onClick={() => window.print()}
