@@ -39,6 +39,20 @@ export default function DashboardCalculator() {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
+    async function fetchGlobalSettings() {
+      const { data } = await supabase.from('system_settings').select('*').eq('id', 1).single();
+      if (data) {
+        setCostPerPanel(data.cost_per_panel);
+        setCostInverter(data.cost_inverter);
+        setCostStructurePerPanel(data.cost_structure_per_panel);
+        setCostLabor(data.cost_labor);
+        setTaxRate(data.tax_rate);
+      }
+    }
+    fetchGlobalSettings();
+  }, []);
+
+  useEffect(() => {
     const dailyKwh = monthlyKwh / 30;
     const efficiency = 0.8;
     const panelDailyProduction = (panelWattage * sunHours / 1000) * efficiency;
@@ -97,9 +111,9 @@ export default function DashboardCalculator() {
       
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000); // Reset success message after 3 seconds
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error al guardar la cotización:', error);
-      alert("Ocurrió un error al conectar con Supabase. Verifica tu conexión.");
+      alert(`Error de Supabase: ${error.message || 'Verifica la consola para más detalles.'}`);
     } finally {
       setIsSaving(false);
     }
@@ -171,19 +185,19 @@ export default function DashboardCalculator() {
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-[10px] font-extrabold text-slate-500 mb-1 uppercase tracking-wider">Costo x Panel</label>
-              <input type="number" value={costPerPanel} onChange={e => setCostPerPanel(Number(e.target.value))} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-slate-900 font-bold" />
+              <input type="number" readOnly value={costPerPanel} title="Cambia esto en Configuración de Precios" className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none text-slate-500 font-bold cursor-not-allowed" />
             </div>
             <div>
               <label className="block text-[10px] font-extrabold text-slate-500 mb-1 uppercase tracking-wider">Inversor / Hub</label>
-              <input type="number" value={costInverter} onChange={e => setCostInverter(Number(e.target.value))} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-slate-900 font-bold" />
+              <input type="number" readOnly value={costInverter} title="Cambia esto en Configuración de Precios" className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none text-slate-500 font-bold cursor-not-allowed" />
             </div>
             <div>
               <label className="block text-[10px] font-extrabold text-slate-500 mb-1 uppercase tracking-wider">Estruct. x Panel</label>
-              <input type="number" value={costStructurePerPanel} onChange={e => setCostStructurePerPanel(Number(e.target.value))} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-slate-900 font-bold" />
+              <input type="number" readOnly value={costStructurePerPanel} title="Cambia esto en Configuración de Precios" className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none text-slate-500 font-bold cursor-not-allowed" />
             </div>
             <div>
               <label className="block text-[10px] font-extrabold text-slate-500 mb-1 uppercase tracking-wider">Mano de Obra</label>
-              <input type="number" value={costLabor} onChange={e => setCostLabor(Number(e.target.value))} className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none text-slate-900 font-bold" />
+              <input type="number" readOnly value={costLabor} title="Cambia esto en Configuración de Precios" className="w-full bg-slate-100 border border-slate-200 rounded-lg px-3 py-2 text-sm outline-none text-slate-500 font-bold cursor-not-allowed" />
             </div>
           </div>
         </section>
