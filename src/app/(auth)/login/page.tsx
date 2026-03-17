@@ -37,11 +37,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col justify-center items-center p-4 relative overflow-hidden font-sans text-slate-900">
-      
-      <Link href="/" className="absolute top-8 left-8 text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors flex items-center gap-1 group">
-        <ChevronRight className="w-4 h-4 rotate-180 group-hover:-translate-x-1 transition-transform" />
-        Volver
-      </Link>
 
       <div className="w-full max-w-md relative z-10">
         
