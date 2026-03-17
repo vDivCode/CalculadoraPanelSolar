@@ -204,7 +204,7 @@ export default function DashboardCalculator() {
           <div className="bg-blue-600 rounded-2xl p-5 border border-blue-700 shadow-md">
             <span className="block text-sm font-bold text-blue-100 mb-1 tracking-wide">Precio Total al Cliente</span>
             <div className="text-4xl font-black text-white flex items-baseline gap-1">
-              <span className="text-2xl text-blue-200">$</span>
+              <span className="text-2xl text-blue-100">$</span>
               {totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 })}
             </div>
           </div>

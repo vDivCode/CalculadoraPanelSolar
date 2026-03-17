@@ -117,7 +117,7 @@ export default function SolarCalculator() {
             Calculadora <span className="text-blue-600">Solar</span>
           </h1>
           <p className="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
-            Descubre exactamente cuántos paneles necesitas para potenciar tu {propertyType.toLowerCase()} de madera inteligente y renovable.
+            Descubre exactamente cuántos paneles necesitas para potenciar tu hogar, empresa o mina de manera eficiente y renovable.
           </p>
         </header>
 
@@ -158,7 +158,6 @@ export default function SolarCalculator() {
               </div>
             </div>
 
-            {/* Energy Consumption */}
             <div className="space-y-6 pt-6 border-t border-slate-200">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <h2 className="text-xl font-semibold flex items-center gap-2 text-slate-800">
@@ -217,7 +216,6 @@ export default function SolarCalculator() {
                 </div>
               )}
 
-              {/* Advanced Settings */}
               <div className="grid sm:grid-cols-2 gap-4 mt-8">
                 <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
                   <label className="block text-sm font-semibold text-slate-700 mb-2">
