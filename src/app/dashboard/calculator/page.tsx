@@ -252,7 +252,7 @@ export default function DashboardCalculator() {
             <div className="flex justify-between items-center text-sm">
               <span className="font-bold text-slate-500 flex items-center gap-2">
                 Impuestos (IGV/IVA)
-                <input type="number" value={taxRate} onChange={e => setTaxRate(Number(e.target.value))} className="w-12 bg-slate-100 border border-slate-300 text-center rounded text-xs py-0.5 outline-none font-bold text-slate-900" />%
+                <input type="number" readOnly value={taxRate} className="w-12 bg-slate-100 border border-slate-200 text-center rounded text-xs py-0.5 outline-none font-bold text-slate-500 cursor-not-allowed" />%
               </span>
               <span className="text-slate-600 font-bold">+ ${taxes.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
             </div>

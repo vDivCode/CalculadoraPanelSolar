@@ -83,9 +83,9 @@ export default function DashboardSummary() {
                     <span className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-0.5">Monto Total</span>
                     <span className="text-lg font-black text-slate-900">${Number(quote.total_price).toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
                   </div>
-                  <button className="p-3 bg-slate-50 rounded-xl text-slate-400 hover:bg-blue-600 hover:text-white transition-all group-hover:translate-x-1">
+                  <Link href={`/dashboard/quote/${quote.id}`} className="p-3 bg-slate-50 rounded-xl text-slate-400 hover:bg-blue-600 hover:text-white transition-all group-hover:translate-x-1">
                     <ArrowRight className="w-5 h-5" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
