@@ -18,8 +18,12 @@ export default function DashboardLayout({
         </div>
 
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-700 font-semibold transition-colors">
+          <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 font-medium hover:text-slate-900 hover:bg-slate-100 transition-colors">
             <LayoutDashboard className="w-5 h-5" />
+            Dashboard General
+          </Link>
+          <Link href="/dashboard/calculator" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 font-medium hover:text-slate-900 hover:bg-slate-100 transition-colors">
+            <Zap className="w-5 h-5" />
             Calculadora Pro
           </Link>
           <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 font-medium hover:text-slate-900 hover:bg-slate-100 transition-colors">

@@ -51,12 +51,12 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <button 
-              type="button"
+            <Link 
+              href="/dashboard"
               className="w-full py-3.5 mt-2 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors active:scale-[0.98] shadow-md flex items-center justify-center gap-2"
             >
               Iniciar Sesión <ChevronRight className="w-4 h-4" />
-            </button>
+            </Link>
           </form>
         </div>
 
